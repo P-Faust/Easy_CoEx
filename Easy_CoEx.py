@@ -2,9 +2,9 @@ from ast import For
 from unittest import TestResult, result
 import iperf3
 import time
-from multiprocessing import Process
+from multiprocessing import Process, Manager
 
-def firstClient(server: str, port: int):
+def firstClient(server: str, port: int, result_cl: list):
     client = iperf3.Client()
     client.duration = 10
     client.server_hostname = server
@@ -15,13 +15,9 @@ def firstClient(server: str, port: int):
     else:
         ### Gibt die Mbit mit 2 nachkommastellen aus 
         ### print kann mit einer variable ersetzt werden für csv implementiereung
-        #print("{:.2f}".format(float(result.received_Mbps)))
-        result_value = "{:.2f}".format(float(result.received_Mbps))
-        result_cl1.append("{:.2f}".format(float(result.received_Mbps)))
-        result_cl1.append(result_value)
-        result_cl1.append()
+        print("{:.2f}".format(float(result.received_Mbps)))
 
-def secondClient(server: str, port: int):
+def secondClient(server: str, port: int, result_cl: list):
     client2= iperf3.Client()
     client2.duration = 10
     client2.server_hostname = server
@@ -33,9 +29,8 @@ def secondClient(server: str, port: int):
         ### Gibt die Mbit mit 2 nachkommastellen aus 
         ### print kann mit einer variable ersetzt werden für csv implementiereung
         print("{:.2f}".format(float(result2.received_Mbps)))
-        result_cl2.append("{:.2f}".format(float(result2.received_Mbps)))
 
-def thirdClient(server: str, port: int):
+def thirdClient(server: str, port: int, result_cl: list):
     client3= iperf3.Client()
     client3.duration = 10
     client3.server_hostname = server
@@ -47,7 +42,8 @@ def thirdClient(server: str, port: int):
         ### Gibt die Mbit mit 2 nachkommastellen aus 
         ### print kann mit einer variable ersetzt werden für csv implementiereung
         print("{:.2f}".format(float(result3.received_Mbps)))
-        result_cl3.append("{:.2f}".format(float(result3.received_Mbps)))
+        result_cl.append("{:.2f}".format(float(result3.received_Mbps)))
+
 ## Inputs für IP und Port der Server
 if __name__ == '__main__':
     result_cl1 = []
@@ -65,9 +61,9 @@ if __name__ == '__main__':
         #clProcess1 = Process(target=firstClient, args=(server_first,port_first))
         #clProcess2 = Process(target=secondClient, args=(server_second,port_second))
         #clProcess3 = Process(target=thirdClient, args=(server_third,port_third))
-        clProcess1 = Process(target=firstClient, args=("127.0.0.1",5000))
-        clProcess2 = Process(target=secondClient, args=("127.0.0.1",5001))
-        clProcess3 = Process(target=thirdClient, args=("127.0.0.1",5002))
+        clProcess1 = Process(target=firstClient, args=("127.0.0.1",5000, result_cl1))
+        clProcess2 = Process(target=secondClient, args=("127.0.0.1",5001, result_cl1))
+        clProcess3 = Process(target=thirdClient, args=("127.0.0.1",5002, result_cl3))
         clProcess1.start()
         clProcess2.start()
         clProcess3.start()
@@ -78,7 +74,6 @@ if __name__ == '__main__':
         if(loopCheck != "exit" and ""):
             loopCheck = input("exit = exit\nEnter = continue\n")
     for i in range(len(result_cl1)):
-        print(f"Liste 1: {result_cl1[i]}")
-        print(f"Liste 2: {result_cl2[i]}")
-        print(f"Liste 3: {result_cl3[i]}")
-    print(result_cl1)
+        print(result_cl1)
+        print(result_cl2)
+        print(result_cl3)
