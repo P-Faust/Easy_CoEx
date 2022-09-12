@@ -42,7 +42,6 @@ def thirdClient(server: str, port: int, result_cl: list):
         ### Gibt die Mbit mit 2 nachkommastellen aus 
         ### print kann mit einer variable ersetzt werden für csv implementiereung
         print("{:.2f}".format(float(result3.received_Mbps)))
-        result_cl.append("{:.2f}".format(float(result3.received_Mbps)))
 
 ## Inputs für IP und Port der Server
 if __name__ == '__main__':
@@ -73,7 +72,5 @@ if __name__ == '__main__':
         loopCheck = input("exit = exit\nEnter = continue\n")
         if(loopCheck != "exit" and ""):
             loopCheck = input("exit = exit\nEnter = continue\n")
-    for i in range(len(result_cl1)):
-        print(result_cl1)
-        print(result_cl2)
-        print(result_cl3)
+
+# ToDo 3 Listen mit jeweiligen Ergebnissen erstellen
